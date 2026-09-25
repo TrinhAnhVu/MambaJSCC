@@ -19,17 +19,17 @@ DropPath.__repr__ = lambda self: f"timm.DropPath({self.drop_prob})"
 # print(traceback.extract_stack())
 
 
-try:  ## successfully try
-    "sscore acts the same as mamba_ssm"
-    SSMODE = "sscore"
-    # import selective_scan_cuda_core
-    import adaptive_selective_scan_cuda_core
-except Exception as e:
-    print(e, flush=True)
-    "you should install mamba_ssm to use this"
-    SSMODE = "mamba_ssm"
-    import selective_scan_cuda
+SSMODE = "sscore"
 
+try:
+    import selective_scan_cuda_core
+except ImportError as e:
+    raise ImportError(
+        "selective_scan_cuda_core is required. "
+        "Build third_party/MambaJSCC/selective_scan first."
+    ) from e
+
+adaptive_selective_scan_cuda_core = None
 
 # fvcore flops =======================================
 
